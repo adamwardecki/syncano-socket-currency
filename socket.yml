@@ -1,0 +1,25 @@
+name: currency
+version: 0.0.1
+description: 'Exchange money rates, save the data and send real-time notification about exchanges'
+keywords:
+  - money
+  - exchange
+  - currency
+endpoints:
+  convert:
+    description: 'Calling the Fixer API'
+    file: scripts/convert.js
+classes:
+  conversion_logs:
+  -
+    name: from
+    type: string
+  -
+    name: to
+    type: string
+  -
+    name: amount
+    type: integer
+  -
+    name: rate
+    type: integer
