@@ -1,6 +1,6 @@
 name: currency
-version: 0.0.1
-description: 'Exchange money rates, save the data and send real-time notification about exchanges'
+version: 0.0.2
+description: 'Exchange money and log the data about conversions'
 keywords:
   - money
   - exchange
@@ -9,6 +9,61 @@ endpoints:
   convert:
     description: 'Calling the Fixer API'
     file: scripts/convert.js
+    parameters:
+      from:
+        type: string
+        description: Currency from which to make a conversion
+        example: "USD"
+      to:
+        type: string
+        description: Currency to which convert to
+      amount:
+        type: number
+        description: amount of currency to convert
+    response:
+      mimetype: application/json
+    examples:
+        - exit_code: 200
+          description: "Successful conversion"
+          example: |
+            {
+                "result": 202.38273921200752
+            }
+    examples:
+        - exit_code: 400
+          description: "Value error"
+          example: |
+            {
+                "error": "'200' value type is not valid. It should be a number.
+            }
+  get_logs:
+    description: 'Get conversion logs'
+    file: scripts/get_logs.js
+    response:
+      mimetype: application/json
+    examples:
+        - exit_code: 200
+          description: "Conversion log"
+          example: |
+            [
+              {
+                "from":"GBP",
+                "to":"USD",
+                "amount":390,
+                "result": 484.161585366,
+                "channel_room":null,
+                "links":
+                  {
+                    "self":"/v2/instances/still-frost-9629/classes/conversion_logs/objects/1/"
+                  },
+                "created_at":"2017-02-27T11:07:22.287929Z",
+                "updated_at":"2017-02-27T11:07:22.287952Z",
+                "acl":{},
+                "id":1,
+                "channel":null,
+                "revision":1
+              }
+            ]
 classes:
   conversion_logs:
   -
@@ -21,5 +76,5 @@ classes:
     name: amount
     type: integer
   -
-    name: rate
-    type: integer
+    name: result
+    type: float
