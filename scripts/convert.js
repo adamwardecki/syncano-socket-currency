@@ -11,7 +11,7 @@ function response(code, content) {
 }
 
 function convert(from, to, amount) {
-  // Calling fixer API. Documentation can be found here: http://fixer.io/
+  // Calling Fixer API. Documentation can be found here: http://fixer.io/
   return axios.get('http://api.fixer.io/latest')
     .then((response) => {
   // Money.js https://openexchangerates.github.io/money.js/
@@ -25,13 +25,11 @@ function convert(from, to, amount) {
     });
 }
 
-const from = ARGS.from;
-const to = ARGS.to;
-const amount = ARGS.amount;
+const { from, to, amount } = ARGS;
 
-const fromError = `From '${from}' value is not valid. It should be a string`
-const toError = `To '${to}' value is not valid. It should be a string`
-const amountError = `Amount '${amount}' value is not valid. It should be a number`
+const fromError = `'${from}' value type for 'from' param is not valid. It should be a string.`
+const toError = `'${to}' value type for 'to' param is not valid. It should be a string.`
+const amountError = `'${amount}' value type is not valid. It should be a number.`
 
 if (typeof from !== 'string') response(400, {"error": fromError});
 if (typeof to !== 'string') response(400, {"error": toError});
@@ -39,15 +37,14 @@ if (typeof amount !== 'number') response(400, {"error": amountError});
 
 
 convert(from, to, amount)
-  .then(function(rate) {
+  .then(function(result) {
     // Line below uses Syncano data storage features
     // Log the conversion info in in the conversion_logs class for future reference
-    data.conversion_logs.create({from, to, amount, rate});
+    data.conversion_logs.create({from, to, amount, result}).then(() => {
+      const error = 'Please provide proper currency value (i.e. "USD").'
+      if (typeof result !== 'number') response(400, {error});
 
-    const error = 'Please provide proper currency value (i.e. "USD")'
-    if (typeof rate !== 'number') response(400, {error});
-
-    response(200, {rate})
-
-})
+      response(200, {result})
+    });
+  })
   .catch((error) => response(400, error));
