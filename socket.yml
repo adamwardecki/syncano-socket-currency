@@ -29,7 +29,6 @@ endpoints:
             {
                 "result": 202.38273921200752
             }
-    examples:
         - exit_code: 400
           description: "Value error"
           example: |
@@ -66,15 +65,15 @@ endpoints:
             ]
 classes:
   conversion_logs:
-  -
-    name: from
-    type: string
-  -
-    name: to
-    type: string
-  -
-    name: amount
-    type: integer
-  -
-    name: result
-    type: float
+    -
+      name: from
+      type: string
+    -
+      name: to
+      type: string
+    -
+      name: amount
+      type: integer
+    -
+      name: result
+      type: float
